@@ -1,0 +1,13 @@
+body {
+    background-color:darkcyan;
+}
+h1 {
+    color:cornsilk;
+    font-weight: bold;
+    text-align: center;
+}
+#text {
+    font-size: 2rem;
+    text-align: center;
+    color:floralwhite
+}
