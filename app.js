@@ -6,7 +6,10 @@ const db = require('./config/db');
 const MongoClient = require('mongodb').MongoClient;
 // const io = require('socket.io')(server);
 // const http = require('http');
-const path = require('path');
+//const path = require('path');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+ 
 
 const app = express();
 // const server = http.Server(app);
@@ -49,69 +52,17 @@ MongoClient.connect(db.url, {
 })
 .catch(err => console.log(err));
 
+app.use(session({
+    secret: 'foo',
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: db.url,
+        ttl: 1 * 24 * 60 * 60,
+    }),
+}));
 
 
-
-// server.listen(port, '127.0.0.1', function(){
-//     var addr = server.address();
-//     logger.level = 'debug'; 
-//     logger.debug('listening on '+addr.address+':' + addr.port);
-// });
-
-// app.get('/products', function(req,res){
-
-//     app.get('/products', (req, res) => {
-//         db.collection('Products').find(req.query).toArray((err, items) => {
-//             res.send(items);
-//         });
-//     });
-
-//     let pagesCount = Math.ceil(products.length / req.query.count);
-
-//     let currentProducts = [];
-
-//     for(let i = 1; i <= pagesCount; i++) {
-//         if(i == req.query.page) {
-//             for(let j = 1; j <= req.query.count; j++) {
-//                 if(products[ (i - 1) * req.query.count + j - 1] !== undefined) {
-//                     currentProducts.push(products[ (i - 1) * req.query.count + j - 1]);
-//                 }
-//             }
-//         }
-//     }
-
-//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-//     res.send({products: currentProducts, 
-//               productsCount: products.length,
-//             });
-// });
-
-
-
-// users = [
-//     {id: 1,
-//     login: 'grbak',
-//     password: '1111',},
-
-//     {id: 2,
-//     login: 'moalim163',
-//     password: 'ura',},
-
-//     {id: 3,
-//     login: 'jakub',
-//     password: 'ultraq',},
-// ];
-
-
-// app.get('/:username', function(req,res){
-//     res.send('Hello '+req.params.username+'!');
-// });
-
-// app.get('/photo', function(req,res){
-//     res.sendFile(__dirname+`/public/photos/${req.query.productId}`);
-// });
-
-// app.use(express.static(__dirname+'/public'));
 
 
 let products = [
